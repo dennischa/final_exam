@@ -42,10 +42,9 @@ public class MyBaseAdapter extends BaseAdapter{
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
-        // need something here
-
-        return itemLayout;
-
+       TextView tmp = (TextView)parent.getChildAt(position).getRootView();
+        tmp.setText(mData.get(position).name + Integer.toString(mData.get(position).spent_money));
+        convertView = (View)tmp;
+        return convertView;
     }
 }

@@ -3,12 +3,13 @@ package com.example.sm.problem3;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
+
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity {
+    static boolean key = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,10 +29,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         for(CustomerThread ct : list){
-
             try {
-                // need something here
-            } catch (InterruptedException e) { }
+                if(ct.chance != 0)
+                    throw new InterruptedException();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         manager.sort();
@@ -47,9 +50,19 @@ public class MainActivity extends AppCompatActivity {
 class CustomerThread extends Thread{
 
     Customer customer;
+    int chance = 10;
 
     CustomerThread(Customer customer){
         this.customer = customer;
+    }
+
+    public void start(){
+        if( MainActivity.key && chance > 0){
+            MainActivity.key =false;
+            customer.work();
+            chance--;
+            MainActivity.key =true;
+        }
     }
     // need something here
 }
@@ -70,6 +83,13 @@ class Customer extends Person{
         this.name = name;
     }
 
+    public void work(){
+        Random a = new Random();
+        int tmp =  a.nextInt(1000);
+        money -= tmp;
+        spent_money += tmp;
+    }
+
     // need something here
 }
 
@@ -81,10 +101,18 @@ class Manager extends Person{
         list.add(customer);
     }
 
-    void sort(){ // 직접 소팅 알고리즘을 이용하여 코딩해야함. 자바 기본 정렬 메소드 이용시 감
-
-        // need something here
-
+    void sort(){
+        for(int i = 0 ; i < list.size() - 1; i++)
+        {
+            for(int j = i + 1 ; j < list.size() ; j++){
+                if(list.get(i).spent_money > list.get(j).spent_money)
+                {
+                    int tmp = list.get(i).spent_money;
+                    list.get(i).spent_money = list.get(j).spent_money;
+                    list.get(j).spent_money = tmp;
+                }
+            }
+        }
     }
 
     @Override

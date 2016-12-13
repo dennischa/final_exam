@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import java.util.ArrayList;
 
 public class MyBaseAdapter extends BaseAdapter implements AdapterView.OnItemClickListener{
@@ -66,6 +67,15 @@ public class MyBaseAdapter extends BaseAdapter implements AdapterView.OnItemClic
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // need something here
+        Employee employee = (Employee) mData.get(position);
+        String name = employee.getName();
+        Integer age = employee.getAge();
+        Integer salary = employee.getSalary();
+        String tmp = name + "   " + age + "     "+ salary;
+
+        TextView tv = (TextView)parent.getChildAt(position).getRootView();
+        tv.setText(tmp);
+        convertView = (View)tv;
+        return convertView;
     }
 }
